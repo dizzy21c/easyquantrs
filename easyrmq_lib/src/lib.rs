@@ -1,4 +1,6 @@
 pub mod easyrmq;
+pub mod qaeventmq;
+pub mod lapinmq;
 
 #[cfg(test)]
 mod tests {
