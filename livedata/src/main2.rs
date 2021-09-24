@@ -133,18 +133,16 @@ fn main() {
     println!("cpus {}", cpus);
     let vecStr = get_code_split(codes_filepath).unwrap();
     let idx = vecStr.codes.len();
-    loop {
-        let mut thread_handles = vec![];
-        for str in vecStr.codes.clone() {
-            thread_handles.push(
-                thread::spawn( move || loop_load_data(str, worker_sleep))
-            );
-        }
+    let mut thread_handles = vec![];
+    for str in vecStr.codes {
+        thread_handles.push(
+            thread::spawn( move || loop_load_data(str, worker_sleep))
+        );
+    }
 
-        // Join: Wait for all threads to finish.
-        for handle in thread_handles {
-            handle.join().unwrap();
-        }
+    // Join: Wait for all threads to finish.
+    for handle in thread_handles {
+        handle.join().unwrap();
     }
     // thread::sleep(Duration::from_secs(3));
 }
@@ -199,7 +197,7 @@ fn loop_load_data(codeList:String, sleep: u64) {
         )
         .unwrap();
 
-    // loop {
+    loop {
         let local: DateTime<Local> = Local::now();
         println!("get now: {}, sleep={}", local, sleep);
         let test:Vec<&str> = codeList.split(",").collect();
@@ -214,7 +212,7 @@ fn loop_load_data(codeList:String, sleep: u64) {
 
         // load_data(url.to_string());
         thread::sleep(Duration::from_secs(sleep));
-    // }
+    }
 
     connection.close();
 }
