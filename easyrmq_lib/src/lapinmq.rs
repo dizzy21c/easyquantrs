@@ -16,7 +16,7 @@ type Pool = deadpool::managed::Pool<lapin::Connection, lapin::Error>;
 type Connection = deadpool::managed::Object<lapin::Connection, lapin::Error>;
 
 #[derive(ThisError, Debug)]
-enum Error {
+pub enum Error {
     #[error("rmq error: {0}")]
     RMQError(#[from] lapin::Error),
     #[error("rmq pool error: {0}")]
@@ -54,16 +54,17 @@ pub async fn mod_main() -> Result<()> {
 pub async fn publish_msg_handler(pool: Pool) -> Result<()> {
     let payload = b"Hello world!";
 
-    let rmq_con = get_rmq_con(pool).await.map_err(|e| {
+    let rmq_con = get_rmq_con(pool).await
+        .map_err(|e| {
         eprintln!("can't connect to rmq, {}", e);
         // warp::reject::custom(Error::RMQPoolError(e))
     // })?;
-    });
+    }).unwrap();
     let channel = rmq_con.create_channel().await.map_err(|e| {
         eprintln!("can't create channel, {}", e);
         // warp::reject::custom(Error::RMQError(e))
     // })?;
-    });
+    }).unwrap();
     channel
         .basic_publish(
             "",
@@ -72,12 +73,6 @@ pub async fn publish_msg_handler(pool: Pool) -> Result<()> {
             payload.to_vec(),
             BasicProperties::default(),
         )
-        .await
-        .map_err(|e| {
-            eprintln!("can't publish: {}", e);
-            // warp::reject::custom(Error::RMQError(e))
-        // })?
-        })
         .await
         .map_err(|e| {
             eprintln!("can't publish: {}", e);

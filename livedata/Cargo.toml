@@ -17,3 +17,19 @@ chrono = { version = "0.4", features = ["serde"] }
 yaml-rust = "0.4"
 pcre2 = "0.2"
 amiquip = "0.4"
+
+async-amqp = { version = "1.2", optional = true }
+deadpool = { version = "0.8.0", default-features = false, features = ["managed"] }
+lapin = { version = "1.0", default-features = false }
+serde_1 = { package = "serde", version = "1.0.103", features = ["derive"], optional = true }
+#tokio-amqp = { version = "1.0", optional = true }
+tokio-amqp = "1.0.0"
+deadpool-lapin = "0.8.0"
+
+
+[dev-dependencies]
+config = { version = "0.11", default-features = false }
+dotenv = "0.15"
+#tokio = { version = "1.0", features = ["sync", "macros", "rt-multi-thread"] }
+#tokio-amqp = "1.0"
+
