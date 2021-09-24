@@ -1,5 +1,5 @@
 [workspace]
-members = ["livedata"]
+members = ["livedata", "savedata"]
 default-member = "livedata"
 
-exclude = ["movie_lib", "movie_lib-test", "easyrmq_lib", "rmq-in-rust-example", "amiquip", "aa2"]
+exclude = ["movie_lib", "movie_lib-test", "rmq-in-rust-example", "amiquip", "aa2"]
